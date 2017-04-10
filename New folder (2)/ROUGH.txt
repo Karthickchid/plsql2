@@ -1,0 +1,36 @@
+declare
+v_name varchar2(20)= &p_job;
+cursor c_emp(p_job varchar2) is select * into v_name from emp;
+v_emp c_emp%rowtype;
+begin
+open c_emp(job);
+dbms_output.put_line('emp from job );
+loop
+fetch c_emp into v_emp;
+exit when c_emp%notfound;
+dbms_output.put_line('ename=' || v_emp.ename ||'sal = ' || v_emp.sal|| 'rowcount = ' || c_emp%rowcount);
+end loop;
+close c_emp;
+end;
+/
+
+
+
+declare
+p_job varchar2(10) := '&eno';
+ cursor c_emp(p_job varchar2) is select  * from emp where job=p_job;
+ v_emp c_emp%rowtype;
+ begin
+ open c_emp(p_job);
+ dbms_output.put_line('emp from job');
+ loop 
+ fetch c_emp into  v_emp;
+ exit when c_emp%notfound;
+ dbms_output.put_line('ename=' || v_emp.ename || 'sal=' ||v_emp.sal|| 'rowcount='|| c_emp%rowcount);
+ end loop;
+ if c_emp%isopen then
+ dbms_output.put_line('closing cursor');
+ close c_emp;
+ end if;
+end;
+/
